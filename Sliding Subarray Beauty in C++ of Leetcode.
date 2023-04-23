@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<int> getSubarrayBeauty(vector<int>& nums, int k, int x) {
+        vector<int> res;
+        int n = nums.size();
+        map<int, int> freq;
+        for (int i = 0; i < k; i++) {
+            freq[nums[i]]++;
+        }
+        int left = 0, right = k-1;
+        while (right < n) {
+            int beauty = 0;
+            for (auto it = freq.begin(); it != freq.end(); it++) {
+                if (it->first < 0) {
+                    beauty += it->second;
+                    if (beauty >= x) {
+                        res.push_back(it->first);
+                        break;
+                    }
+                }
+            }
+            if (beauty < x) {
+                res.push_back(0);
+            }
+            if (right == n-1) {
+                break;
+            }
+            freq[nums[left]]--;
+            if (freq[nums[left]] == 0) {
+                freq.erase(nums[left]);
+            }
+            freq[nums[right+1]]++;
+            left++;
+            right++;
+        }
+        return res;  
+    }
+};
